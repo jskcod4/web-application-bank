@@ -1,0 +1,153 @@
+:host {
+  display: block;
+  padding: 0 80px;
+
+  .bank-list-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .bank-filter-input {
+    background-color: white;
+    border: 1px solid #cfcfcf;
+    min-width: 250px;
+    height: 40px;
+    padding: 0 10px;
+    border-radius: 5px;
+  }
+
+  .bank-filter-btn {
+    background-color: #fade4a;
+    padding: 15px 20px;
+    border: none;
+    color: black;
+    cursor: pointer;
+    &--float {
+      display: none;
+      border-radius: 50%;
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    }
+  }
+
+  .bank__box {
+    background-color: white;
+    padding: 20px;
+  }
+
+  .bank-list-option + .bank__box {
+    margin-top: 20px;
+  }
+
+  .bank__table__wrapper {
+    &__content {
+      overflow-x: auto;
+    }
+    &__options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 50px;
+      width: 100%;
+    }
+  }
+
+  .bank__select {
+    background-color: white;
+    border: thin solid #e4e7e7;
+    border-radius: 4px;
+    display: inline-block;
+    font: inherit;
+    line-height: 1.5em;
+    padding: 0.5em 3.5em 0.5em 1em;
+
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    appearance: none;
+
+    background-image: linear-gradient(45deg, transparent 50%, black 50%),
+      linear-gradient(135deg, black 50%, transparent 50%),
+      linear-gradient(to right, #ccc, #ccc);
+    background-position: calc(100% - 20px) calc(1em + 2px),
+      calc(100% - 15px) calc(1em + 2px), calc(100% - 2.5em) 0.5em;
+    background-size: 5px 5px, 5px 5px, 1px 1.5em;
+    background-repeat: no-repeat;
+  }
+
+  .bank__table {
+    width: 100%;
+    border-bottom: 1px solid #e4e7e7;
+
+    thead {
+      background-color: #f9fafc;
+      tr {
+        height: 50px;
+      }
+      th {
+        font-weight: bold;
+        border: none;
+      }
+    }
+    tbody {
+      overflow-x: auto;
+      tr {
+        height: 50px;
+      }
+      td {
+        text-align: center;
+        border: none;
+      }
+    }
+
+    &__column,
+    &__cell {
+      text-align: center;
+      border-bottom: 1px solid rgb(228, 231, 231);
+      &--small {
+        min-width: 100px;
+      }
+      &--medium {
+        min-width: 200px;
+      }
+      &--large {
+        min-width: 300px;
+      }
+    }
+
+    &__cell {
+      img {
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  :host {
+    padding: 0 40px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  :host {
+    padding: 0 20px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  :host {
+    padding: 0 20px 60px 20px;
+
+    .bank-filter-btn {
+      display: none;
+      &--float {
+        display: flex;
+      }
+    }
+  }
+}

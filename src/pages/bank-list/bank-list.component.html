@@ -1,0 +1,100 @@
+<div
+  class="bank-list-option"
+  [ngStyle]="{ display: (isLoading$ | async) ? 'none' : 'flex' }"
+>
+  <input
+    #inputSearch
+    type="text"
+    class="bank-filter-input"
+    placeholder="Buscar por id, nombre, descripción, fecha de liberación, fecha de revisión"
+  />
+  <button class="bank-filter-btn" (click)="goToAdd()">Agregar</button>
+</div>
+
+<div class="bank__box">
+  <div class="bank__table__wrapper">
+    <div class="bank__table__wrapper__content">
+      <app-skeleton-table *ngIf="isLoading$ | async"></app-skeleton-table>
+      <table *ngIf="!(isLoading$ | async)" class="bank__table">
+        <thead>
+          <tr>
+            <th class="bank__table__column bank__table__column--small">Logo</th>
+            <th class="bank__table__column bank__table__column--medium">
+              Nombre del producto
+            </th>
+            <th class="bank__table__column bank__table__column--large">
+              Descripción
+            </th>
+            <th class="bank__table__column bank__table__column--medium">
+              Fecha de liberación
+            </th>
+            <th class="bank__table__column bank__table__column--medium">
+              Fecha de revisión
+            </th>
+            <th class="bank__table__column bank__table__column--small"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of products$ | async">
+            <td class="bank__table__cell bank__table__cell--small">
+              <img
+                class="bank__list__header__image"
+                [ngSrc]="product.imageUrl"
+                alt="Image principal del banco Pichincha"
+                priority
+                width="36"
+                height="36"
+              />
+            </td>
+            <td class="bank__table__cell bank__table__cell--medium">
+              {{ product.name }}
+            </td>
+            <td class="bank__table__cell bank__table__cell--large">
+              {{ product.description }}
+            </td>
+            <td class="bank__table__cell bank__table__cell--medium">
+              {{ product.dateRelease | date : "dd/MM/yyyy" }}
+            </td>
+            <td class="bank__table__cell bank__table__cell--medium">
+              {{ product.dateRevision | date : "dd/MM/yyyy" }}
+            </td>
+            <td class="bank__table__cell bank__table__cell--small">
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                aria-label="Example icon-button with a menu"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="edit(product)">
+                  <span>Editar</span>
+                </button>
+                <button mat-menu-item (click)="delete(product)">
+                  <span>Eliminar</span>
+                </button>
+              </mat-menu>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div
+      *ngIf="(products$ | async)?.length"
+      class="bank__table__wrapper__options"
+    >
+      <label> {{ (products$ | async)?.length }} Resultados </label>
+
+      <select class="bank__select" name="select" (change)="select($event)">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<button class="bank-filter-btn bank-filter-btn--float" (click)="goToAdd()">
+  +
+</button>

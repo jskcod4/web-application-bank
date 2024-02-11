@@ -1,0 +1,183 @@
+<div class="bank__box">
+  <div class="bank__create">
+    <div class="bank__create__header">Formulario de registro</div>
+    <div class="bank__create__content">
+      <form class="bank__form" [formGroup]="form">
+        <div
+          class="bank__control"
+          [ngClass]="{
+            'bank__control--danger':
+              form.get('id')?.invalid &&
+              (form.get('id')?.dirty || form.get('id')?.touched)
+          }"
+        >
+          <label for="id">ID</label>
+          <input
+            type="text"
+            id="id"
+            name="id"
+            placeholder="Ingrese el ID"
+            formControlName="id"
+          />
+          <span
+            *ngIf="
+              form.get('id')?.invalid &&
+              (form.get('id')?.dirty || form.get('id')?.touched)
+            "
+            class="bank__control__mesage"
+          >
+            ID Inválido
+          </span>
+        </div>
+
+        <div
+          class="bank__control"
+          [ngClass]="{
+            'bank__control--danger':
+              form.get('name')?.invalid &&
+              (form.get('name')?.dirty || form.get('name')?.touched)
+          }"
+        >
+          <label for="name">Nombre</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            placeholder="Ingrese el nombre"
+            formControlName="name"
+          />
+          <span
+            *ngIf="
+              form.get('name')?.invalid &&
+              (form.get('name')?.dirty || form.get('name')?.touched)
+            "
+            class="bank__control__mesage"
+          >
+            Nombre inválido
+          </span>
+        </div>
+
+        <div
+          class="bank__control"
+          [ngClass]="{
+            'bank__control--danger':
+              form.get('description')?.invalid &&
+              (form.get('description')?.dirty ||
+                form.get('description')?.touched)
+          }"
+        >
+          <label for="description">Descripción</label>
+          <input
+            type="text"
+            id="description"
+            name="description"
+            required
+            placeholder="Ingrese la descripción"
+            formControlName="description"
+          />
+          <span
+            *ngIf="
+              form.get('description')?.invalid &&
+              (form.get('description')?.dirty ||
+                form.get('description')?.touched)
+            "
+            class="bank__control__mesage"
+          >
+            Descripción inválida
+          </span>
+        </div>
+
+        <div
+          class="bank__control"
+          [ngClass]="{
+            'bank__control--danger':
+              form.get('imageUrl')?.invalid &&
+              (form.get('imageUrl')?.dirty || form.get('imageUrl')?.touched)
+          }"
+        >
+          <label for="imageUrl">Logo</label>
+          <input
+            type="text"
+            id="imageUrl"
+            name="imageUrl"
+            required
+            placeholder="Ingrese la url del logo"
+            formControlName="imageUrl"
+          />
+          <span
+            *ngIf="
+              form.get('imageUrl')?.invalid &&
+              (form.get('imageUrl')?.dirty || form.get('imageUrl')?.touched)
+            "
+            class="bank__control__mesage"
+          >
+            Logo inválido
+          </span>
+        </div>
+
+        <div
+          class="bank__control"
+          [ngClass]="{
+            'bank__control--danger':
+              form.get('dateRelease')?.invalid &&
+              (form.get('dateRelease')?.dirty ||
+                form.get('dateRelease')?.touched)
+          }"
+        >
+          <label for="dateRelease">Fecha liberación</label>
+          <input
+            type="date"
+            id="dateRelease"
+            name="dateRelease"
+            required
+            placeholder="Fecha de liberación"
+            formControlName="dateRelease"
+            (change)="changeDateRelease()"
+          />
+          <span
+            *ngIf="
+              form.get('dateRelease')?.invalid &&
+              (form.get('dateRelease')?.dirty ||
+                form.get('dateRelease')?.touched)
+            "
+            class="bank__control__mesage"
+          >
+            Fecha de liberación inválida
+          </span>
+        </div>
+
+        <div class="bank__control">
+          <label for="dateRevision">Fecha de revisión</label>
+          <input
+            type="date"
+            id="dateRevision"
+            name="dateRevision"
+            required
+            placeholder="Fecha de revisión"
+            formControlName="dateRevision"
+          />
+        </div>
+
+        <div class="bank__options bank__options--right">
+          <button class="bank__button bank__button--web" (click)="reset()">
+            Reiniciar
+          </button>
+        </div>
+        <div class="bank__options">
+          <button class="bank__button bank__button--mobile" (click)="reset()">
+            Reiniciar
+          </button>
+          <button
+            type="submit"
+            class="bank__button bank__button--success"
+            [disabled]="!form.valid"
+            (click)="submit()"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

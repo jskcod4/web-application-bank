@@ -1,0 +1,18 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.bank__list__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+  background-color: white;
+}
+
+.bank__list__body {
+  flex: 1;
+  padding: 40px 0;
+  overflow-y: auto;
+}

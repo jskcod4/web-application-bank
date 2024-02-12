@@ -22,13 +22,17 @@ export function productIdAsyncValidator(
 ): AsyncValidatorFn {
   return (control: AbstractControl) => {
     if (control.value?.trim() === '') {
-      return of(null);
+      return Promise.resolve(null);
     }
-
-    return from(productRepository.isValidId(control.value)).pipe(
-      catchError(() => of({ asyncValid: false })),
-      map((res) => (res ? null : { asyncInvalid: false }))
-    );
+    return new Promise((resolve) => {
+      productRepository.isValidId(control.value).then((valid) => {
+        if (valid) {
+          resolve(null);
+        } else {
+          resolve({ asyncInvalid: true });
+        }
+      });
+    });
   };
 }
 

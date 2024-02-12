@@ -9,8 +9,8 @@ import {
 import { Store } from '@ngrx/store';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { AppStore } from '../../app/store/reducer';
-import { ADD_PRODUCT, EDIT_PRODUCT } from '../../app/store/actions';
+import { format, toDate } from 'date-fns';
+import { Subscription, firstValueFrom } from 'rxjs';
 
 import {
   FormControl,
@@ -19,6 +19,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+
+import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   productDateReleaseValidator,
@@ -29,12 +31,12 @@ import {
   productNameValidator,
 } from '../../app/shared/product.validators';
 
+import { AppStore } from '../../app/store/reducer';
+import { ADD_PRODUCT, EDIT_PRODUCT } from '../../app/store/actions';
+
 import { generateDateRevision } from '../../modules/product/domain/product-date-revision';
-import { format, toDate } from 'date-fns';
 import { Product } from '../../modules/product/domain/product';
-import { AppEffects } from '../../app/store/effects';
-import { Subscription, firstValueFrom } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ApiProductRepository } from '../../modules/product/infrastructure/product-service.repository';
 
 @Component({
   selector: 'app-bank-create',
@@ -46,7 +48,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class BankCreateComponent implements OnInit, OnDestroy {
   form = new FormGroup({
-    id: new FormControl('', [Validators.required, productIdValidator()]),
+    id: new FormControl(
+      '',
+      [Validators.required, productIdValidator()],
+      [productIdAsyncValidator(this.apiProductRepository)]
+    ),
     name: new FormControl('', [Validators.required, productNameValidator()]),
     description: new FormControl('', [
       Validators.required,
@@ -69,16 +75,15 @@ export class BankCreateComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<AppStore>,
-    private effects: AppEffects,
     private _snackBar: MatSnackBar,
     private router: Router,
     private activeRoute: ActivatedRoute,
-    private changeDetection: ChangeDetectorRef
+    private changeDetection: ChangeDetectorRef,
+    private apiProductRepository: ApiProductRepository
   ) {}
 
   ngOnInit(): void {
     this.form.get('dateRevision')?.disable();
-    this.watchEvents();
     this.seeParams();
   }
 
@@ -103,7 +108,13 @@ export class BankCreateComponent implements OnInit, OnDestroy {
       ? EDIT_PRODUCT({ id: product.id, product })
       : ADD_PRODUCT({ product });
 
+    const message = this.editMode
+      ? 'Se ha editado el producto correctamente!'
+      : 'Se ha agregado un nuevo producto correctamente!';
+
     this.store.dispatch(action);
+    this._snackBar.open(message, '', { duration: 2000 });
+    this.router.navigateByUrl('/');
   }
 
   reset() {
@@ -129,38 +140,16 @@ export class BankCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  private watchEvents() {
-    this.sub$.add(
-      this.effects.addProducts$.subscribe(() => {
-        this._snackBar.open(
-          'Se ha agregado un nuevo producto correctamente!',
-          '',
-          { duration: 2000 }
-        );
-
-        this.router.navigateByUrl('/');
-      })
-    );
-    this.sub$.add(
-      this.effects.addProducts$.subscribe(() => {
-        this._snackBar.open('Se ha editado el producto correctamente!', '', {
-          duration: 2000,
-        });
-
-        this.router.navigateByUrl('/');
-      })
-    );
-  }
-
   private async seeParams() {
     const map = await firstValueFrom(this.activeRoute.queryParamMap);
+    const id = map.get('id');
 
-    if (map.get('id')) {
+    if (Boolean(id)) {
       this.sub$.add(
         this.store
           .select((state) => state[0].products)
           .subscribe((res) => {
-            const product = res.find((product) => product.id === map.get('id'));
+            const product = res.find((product) => product.id === id);
 
             if (product) {
               this.editMode = true;

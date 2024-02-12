@@ -71,7 +71,7 @@ export class BankCreateComponent implements OnInit, OnDestroy {
 
   private sub$ = new Subscription();
 
-  private editMode = false;
+  private productToEdit!: Product;
 
   constructor(
     private store: Store<AppStore>,
@@ -104,11 +104,11 @@ export class BankCreateComponent implements OnInit, OnDestroy {
       dateRevision: dateRevision ? new Date(dateRevision) : new Date(),
     };
 
-    const action = this.editMode
-      ? EDIT_PRODUCT({ id: product.id, product })
+    const action = this.productToEdit
+      ? EDIT_PRODUCT({ id: this.productToEdit.id, product })
       : ADD_PRODUCT({ product });
 
-    const message = this.editMode
+    const message = this.productToEdit
       ? 'Se ha editado el producto correctamente!'
       : 'Se ha agregado un nuevo producto correctamente!';
 
@@ -152,8 +152,9 @@ export class BankCreateComponent implements OnInit, OnDestroy {
             const product = res.find((product) => product.id === id);
 
             if (product) {
-              this.editMode = true;
+              this.productToEdit = product;
               this.pathProductToForm(product);
+              this.form.get('id')?.disable();
             } else {
               this.router.navigateByUrl('');
             }

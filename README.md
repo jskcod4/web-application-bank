@@ -1,4 +1,4 @@
-# PichinchaBank
+# WebApplicationBank
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.1.0.
 Node version: v20.11.0
